@@ -5,3 +5,4 @@ dist/
 .vscode
 # Firebase / Google Cloud credentials
 *-firebase-adminsdk-*.json
+social-media-app-160e0-firebase-adminsdk-fbsvc-0155dffb26.json

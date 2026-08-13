@@ -16,7 +16,7 @@ export interface IUser {
     confirmEmail:boolean;
     coverPic:[string];
     picture:[string];
-    friends?:Types.ObjectId;
+    friends?: Types.ObjectId[];
     age:number;
     role:RoleEnum;
     provider:ProviderEnum;

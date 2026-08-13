@@ -95,7 +95,7 @@ class PostService {
                     },
                     {
                         createdBy: {
-                            $in: user.friends
+                            $in: user.friends  ??[]
                         }
                     },
                     {

@@ -14,7 +14,7 @@ export function validation(schema: Partial<Record<keyof Request , ZodType>>){
         for(const key of Object.keys(schema) as KeyReqType[]){
 
 
-            if(key == "body"){
+            if(key === "body" && req.file){
                 req.body.files = req.file
             }
             const validationResult = schema[key]!.safeParse(req[key])

@@ -19,6 +19,8 @@ authRouter.post("/signup/gmail" , async(req , res)=>{
 })
 
 authRouter.post("/confirm-email" , validation(confirmationSchema) , async(req , res)=>{
+    console.log(req.body);
+    
     const result = await authService.confirmEmail(req.body)
     return successResponse({res , statusCode:200 ,msg:"Email confirmed" ,data:result})
 })
