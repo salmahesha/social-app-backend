@@ -3,3 +3,5 @@ dist/
 .env.dev
 .log
 .vscode
+# Firebase / Google Cloud credentials
+*-firebase-adminsdk-*.json
