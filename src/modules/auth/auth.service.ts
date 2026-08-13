@@ -1,22 +1,24 @@
-import { IHUser, userModel } from "../common/DB/models/user.model";
-import UserRepo from "../common/DB/Repo/user.repo";
-import { badRequestException, conflictException, NotFoundException } from "../common/Exceptions/domain.exceptions";
-import { encrypt, decrypt } from "../common/security/encryption";
-import { compareOperation, hashValue } from "../common/security/hash";
-import { ENCRYPTION_KEY, GOOGLE_CLIENT_ID } from '../config/config.service';
+import { IHUser, userModel } from "../../common/DB/models/user.model";
+import UserRepo from "../../common/DB/Repo/user.repo";
+import { badRequestException, conflictException, NotFoundException } from "../../common/Exceptions/domain.exceptions";
+import { encrypt, decrypt } from "../../common/security/encryption";
+import { compareOperation, hashValue } from "../../common/security/hash";
+import { ENCRYPTION_KEY, GOOGLE_CLIENT_ID } from '../../config/config.service';
 import { ConfirmDto, loginDto, resetPassDto, signupDto } from "./auth.dto";
-import TokenService from "../common/security/token.service";
-import redisService from "../common/redis/redis.service";
-import { EmailEnum } from "../common/Enums/email.enum";
-import MailService from "../common/Email/email.service";
+import TokenService from "../../common/security/token.service";
+import redisService from "../../common/redis/redis.service";
+import { EmailEnum } from "../../common/Enums/email.enum";
+import MailService from "../../common/Email/email.service";
 import { ObjectId } from "mongoose";
 import { OAuth2Client } from "google-auth-library";
-import { ProviderEnum } from "../common/Enums/user.enum";
+import { ProviderEnum } from "../../common/Enums/user.enum";
+import notificationService from "../../common/notifecation/notification.service";
 
 class AuthService {
     private userRepo = new UserRepo();
     private tokenService = TokenService;
     private _mailService = new MailService();
+    private _NotificationService = notificationService;
 
 
     public async signup(body: IHUser): Promise<IHUser> {
@@ -45,6 +47,12 @@ class AuthService {
             throw new badRequestException("password wrong")
         }
         // user.phone =  decrypt({ cipheredText: user.phone, key: ENCRYPTION_KEY })
+
+        if(body.FCM){
+            await redisService.addToSet(user._id , body.FCM);
+            const tokens = await redisService.getSetMembers(user._id);
+            await this._NotificationService.sendNotifications({tokens ,data:{title:"user logged in" , body:`user logged in at ${new Date()}`}})
+        }
         const tokens = this.tokenService.getTokens(user)
         return tokens
 

@@ -1,9 +1,10 @@
 import * as z from "zod"
-import { commonValidation } from "../Middlewares/validatioin.middleware"
+import { commonValidation } from "../../Middlewares/validatioin.middleware"
 export const loginSchema = {
     body: z.object({
         email:commonValidation.email,
         password:commonValidation.password,
+        FCM:z.string().optional()
     })
 }
 export const signupSchema = {

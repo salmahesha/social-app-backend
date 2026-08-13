@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { EmailEnum } from "../Enums/email.enum.js";
 import { client } from "./redis.connection.js";
 
@@ -49,6 +49,16 @@ class RedisService {
         }
         return `OTP::${email}::${confirmation}`
     }
+    getFcmKey(userId:Types.ObjectId |string){
+        return `FCM::${userId}`
+    }
+    async addToSet(userId:Types.ObjectId |string , fcmToken:string){
+        return await client.sAdd(this.getFcmKey(userId), fcmToken)
+    }
+    async getSetMembers(userId:Types.ObjectId |string){
+        return await client.sMembers(this.getFcmKey(userId))
+    }
+
 
 }
 export default new RedisService();

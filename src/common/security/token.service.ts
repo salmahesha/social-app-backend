@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import { RoleEnum } from "../Enums/user.enum";
 import { TOKEN_SIGNATURE_ADMIN, TOKEN_SIGNATURE_REFRESH_ADMIN, TOKEN_SIGNATURE_REFRESH_USER, TOKEN_SIGNATURE_USER } from "../../config/config.service";
-import { signupDto } from "../../auth/auth.dto";
+import { signupDto } from "../../modules/auth/auth.dto";
 import { IHUser } from "../DB/models/user.model";
 import { TokenEnum } from "../Enums/token.enum";
 

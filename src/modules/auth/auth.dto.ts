@@ -7,7 +7,10 @@ export interface signupDto{
     password:string,
     confirmPassword:string
 }
-export interface loginDto extends signupDto{}
+export interface loginDto extends signupDto{
+    FCM: any;
+    
+}
 
 export type SignupDto = z.infer<typeof signupSchema.body>
 export type LoginDto = z.infer<typeof loginSchema.body>

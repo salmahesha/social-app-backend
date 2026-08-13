@@ -4,6 +4,7 @@ import type {Request , Response , NextFunction} from "express"
 import { badRequestException } from "../common/Exceptions/domain.exceptions"
 import {z , type ZodType} from "zod"
 import { GenderEnum } from "../common/Enums/user.enum";
+import { Types } from "mongoose";
 
 type KeyReqType = keyof Request;
 export function validation(schema: Partial<Record<keyof Request , ZodType>>){
@@ -12,6 +13,10 @@ export function validation(schema: Partial<Record<keyof Request , ZodType>>){
         const validationsErr:{path:PropertyKey[] , message:string}[] = [];
         for(const key of Object.keys(schema) as KeyReqType[]){
 
+
+            if(key == "body"){
+                req.body.files = req.file
+            }
             const validationResult = schema[key]!.safeParse(req[key])
             if(!validationResult.success){
                 validationsErr.push(
@@ -28,6 +33,7 @@ export function validation(schema: Partial<Record<keyof Request , ZodType>>){
     }
 }
 export const commonValidation = {
+            id:(z.string().refine((value)=>{return Types.ObjectId.isValid(value)} , "invalid objectId")),
             userName:z.string().min(2).max(15).regex(new RegExp(/^[A-Z]{1}[a-z]{1,24}\s[A-Z]{1}[a-z]{1,24}$/)),
             password:z.string().min(8).max(16).regex(new RegExp(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,16}/)),
             email:z.email(),

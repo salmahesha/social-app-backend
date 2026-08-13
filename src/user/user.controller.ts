@@ -4,7 +4,7 @@ import userService from "./user.service";
 import successResponse from "../common/response/success.responce";
 import { validation } from "../Middlewares/validatioin.middleware";
 import { logoutSchema } from "./user.validation";
-import { cloudFileUpload } from "../common/multer/multer.config";
+import { cloudFileUpload, uploadToCloudinary } from "../common/multer/multer.config";
 
 const userRouter = express.Router();
 
@@ -16,8 +16,26 @@ userRouter.post("/logout", authentication() , validation(logoutSchema) , async (
     const result = await userService.logout(req.payload.sub! , req.payload , req.body.logoutOptions);
     return successResponse({res , msg:"User logged out" , data:result})
 });
-userRouter.post("/upload-profile-picture", authentication() ,cloudFileUpload().single('profilePic') , async (req:express.Request , res:express.Response )=>{
-    return successResponse({res , msg:"User Picture" , data:req.file})
-});
+userRouter.post(
+  "/upload-profile-picture",
+  authentication(),
+  cloudFileUpload().single("profilePic"),
+  async (req, res) => {
+
+    const result = await uploadToCloudinary(
+      req.file!.buffer,
+      "profile-pictures"
+    );
+    console.log();
+    
+    return successResponse({
+      res,
+      msg: "User Picture",
+      data: {
+        url: result.secure_url
+      }
+    });
+  }
+);
 
 export default userRouter

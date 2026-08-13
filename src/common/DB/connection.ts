@@ -1,5 +1,5 @@
 import { connect } from "mongoose";
-import { DB_URL_LOCAL } from "../../config/config.service";
+import {DB_URL_LOCAL } from "../../config/config.service";
 export async function testDBConnection(){
     try {
         await connect(DB_URL_LOCAL);
@@ -9,3 +9,4 @@ export async function testDBConnection(){
         
     }
 }
+// AHRvofutC9fQQqAZ

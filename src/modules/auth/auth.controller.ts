@@ -1,7 +1,7 @@
 import express from 'express';
 import authService from './auth.service';
-import successResponse from '../common/response/success.responce';
-import { validation } from '../Middlewares/validatioin.middleware';
+import successResponse from '../../common/response/success.responce';
+import { validation } from '../../Middlewares/validatioin.middleware';
 import { confirmationSchema, loginSchema, signupSchema } from './auth.validation';
 const authRouter = express.Router();
 

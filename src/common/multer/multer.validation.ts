@@ -7,9 +7,13 @@ export const allowedFileFormats = {
     video:["video/mp4"],
     pdf:["application/pdf"]
 }
-export function fileFilter(allowedFormate:string[]) {
-    return( req:Request, file:Express.Multer.File, cb:FileFilterCallback){
-        
+export function fileFilter(allowedFormate: string[]) {
+    return (
+        req: Request,
+        file: Express.Multer.File,
+        cb: FileFilterCallback
+    ) => {
+
         if (!allowedFormate.includes(file.mimetype)) {
             return cb(
                 new badRequestException("Invalid file format", {
@@ -17,7 +21,7 @@ export function fileFilter(allowedFormate:string[]) {
                 })
             );
         }
+
         return cb(null, true);
-    }
-    
+    };
 }

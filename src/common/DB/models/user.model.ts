@@ -1,4 +1,4 @@
-import mongoose, { HydratedDocument, model, Schema } from "mongoose";
+import mongoose, { HydratedDocument, model, Schema, Types } from "mongoose";
 import { number } from "zod";
 import { GenderEnum, ProviderEnum, RoleEnum } from '../../Enums/user.enum';
 import { encrypt } from "../../security/encryption";
@@ -16,6 +16,7 @@ export interface IUser {
     confirmEmail:boolean;
     coverPic:[string];
     picture:[string];
+    friends?:Types.ObjectId;
     age:number;
     role:RoleEnum;
     provider:ProviderEnum;
@@ -42,6 +43,7 @@ const userSchema = new Schema<IUser>({
     enum: GenderEnum,
     default: GenderEnum.Male,
   },
+  friends:[{type:Types.ObjectId , ref:"User"}],
   provider:{type:Number ,enum:ProviderEnum, default:ProviderEnum.System},
   password: {
     type: String,
